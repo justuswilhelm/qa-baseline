@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""Compare number of errors to baseline, error if current is higher."""
+from subprocess import run, PIPE
+from configparser import ConfigParser
+
+import logging
+logging.basicConfig(level='INFO')
+
+
+def get_num_errors():
+    """Get the number of errors by running flake8."""
+    result = run('flake8', stdout=PIPE)
+    out = result.stdout.decode().strip()
+    logging.info("flake8:\n---\n%s\n---", out)
+    return len(out.split("\n"))
+
+
+def get_baseline():
+    """Get baseline error level from config."""
+    config = ConfigParser()
+    config.read('setup.cfg')
+    return int(config['qa'].get('baseline', 0))
+
+
+def main():
+    """Main function."""
+    baseline = get_baseline()
+    current = get_num_errors()
+    if current > baseline:
+        raise AssertionError(
+            "More errors than acceptable. Baseline {}, current {}".format(
+                baseline, current))
+
+
+if __name__ == "__main__":
+    main()
