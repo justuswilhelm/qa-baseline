@@ -1,19 +1,21 @@
 """Trigger various errors in linters."""
+import sys
+from os import path, getenv
 
 
 def pydocstyle_issue():
     """A function with a pydocstyle issue"""
-    pass
+    path
 
 
 def pep8_issue(hello , world):
     """A function with a PEP8 spacing issue."""
-    pass
+    getenv
 
 
 def pyflake_issue():
     """A function with an unused variable."""
-    a = 123
+    a = sys
 
 
 def mccabe_issue():
